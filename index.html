@@ -577,9 +577,10 @@ function renderInsights() {
   const badLine = br
     ? `需警惕：中差评合计 ${k.mid + k.bad} 条，首要问题是「<strong>${br.reason}</strong>」（${br.count} 条）`
     : `中差评合计 ${k.mid + k.bad} 条（<strong>无差评</strong>）——口碑无明显短板，运营重心可放在放量与复购`;
-  const specLine = best
+  const specLine = best && worst && best.sku !== worst.sku
     ? `规格维度：<strong>${best.sku}</strong> 好评率最高（${best.real_rate}%），<strong>${worst.sku}</strong> 相对最低（${worst.real_rate}%，差评 ${worst.bad_n} 条）`
-    : '规格维度：样本不足，暂不做规格对比';
+    : (best ? `规格维度：<strong>${best.sku}</strong> 好评率 ${best.real_rate}%（其余规格样本 <30 条，不参与对比）`
+            : '规格维度：样本不足，暂不做规格对比');
   $('ov-insights').innerHTML = `<strong>核心结论：</strong>
    ① 口碑水位：真实好评率 <strong>${k.real_good_rate}%</strong>（${k.good} 条真实好评 / ${k.real_total} 条有内容评论，另有 ${k.template} 条平台模板好评）；
    ② 好评由「<strong>${gt.theme}</strong>」驱动（命中 ${gt.count} 条，占真实评论 ${pct(gt.count, k.real_total)}%），卖点排序即优先级；
